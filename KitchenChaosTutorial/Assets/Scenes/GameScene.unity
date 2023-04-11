@@ -2694,7 +2694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5686275}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.101960786}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13511,7 +13511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1971cf490145df4b820241f3df4a659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gamePlayingTimerMax: 30
+  gamePlayingTimerMax: 120
 --- !u!4 &1932471756
 Transform:
   m_ObjectHideFlags: 0
