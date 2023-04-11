@@ -17,8 +17,11 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private Button moveRightButton;
     [SerializeField] private Button moveLeftButton;
     [SerializeField] private Button interactButton;
+    [SerializeField] private Button gamepadInteractButton;
     [SerializeField] private Button interactAlternateButton;
+    [SerializeField] private Button gamepadInteractAlternateButton;
     [SerializeField] private Button pauseToggleButton;
+    [SerializeField] private Button gamepadPauseToggleButton;
     [SerializeField] private TextMeshProUGUI soundEffectsText;
     [SerializeField] private TextMeshProUGUI musicText;
     [SerializeField] private TextMeshProUGUI moveUpText;
@@ -26,8 +29,11 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moveRightText;
     [SerializeField] private TextMeshProUGUI moveLeftText;
     [SerializeField] private TextMeshProUGUI interactText;
+    [SerializeField] private TextMeshProUGUI gamepadInteractText;
     [SerializeField] private TextMeshProUGUI interactAlternateText;
+    [SerializeField] private TextMeshProUGUI gamepadInteractAlternateText;
     [SerializeField] private TextMeshProUGUI pauseToggleText;
+    [SerializeField] private TextMeshProUGUI gamepadPauseToggleText;
 
     private void Awake()
     {
@@ -79,7 +85,18 @@ public class OptionsUI : MonoBehaviour
         {
             RebindBinding(GameInput.Binding.Pause, pauseToggleText);
         });
-        
+        gamepadInteractButton.onClick.AddListener(() =>
+        {
+            RebindBinding(GameInput.Binding.Gamepad_Interact, gamepadInteractText);
+        });
+        gamepadInteractAlternateButton.onClick.AddListener(() =>
+        {
+            RebindBinding(GameInput.Binding.Gamepad_InteractAlternate, gamepadInteractAlternateText);
+        });
+        gamepadPauseToggleButton.onClick.AddListener(() =>
+        {
+            RebindBinding(GameInput.Binding.Gamepad_Pause, gamepadPauseToggleText);
+        });
     }
 
     // Start is called before the first frame update
@@ -118,11 +135,15 @@ public class OptionsUI : MonoBehaviour
         interactText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Interact);
         interactAlternateText.text = GameInput.Instance.GetBindingText(GameInput.Binding.InteractAlternate);
         pauseToggleText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Pause);
+        gamepadInteractText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_Interact);
+        gamepadInteractAlternateText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_InteractAlternate);
+        gamepadPauseToggleText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Gamepad_Pause);
     }
 
     public void Show()
     {
         gameObject.SetActive(true);
+        soundEffectsButton.Select();
     }
     
     public void Hide()
@@ -132,7 +153,7 @@ public class OptionsUI : MonoBehaviour
 
     private void RebindBinding(GameInput.Binding binding, TextMeshProUGUI buttonText)
     {
-        buttonText.text = "Press a key";
+        buttonText.text = "Press\n any key";
         buttonText.overflowMode = TextOverflowModes.Overflow;
         GameInput.Instance.Rebind(binding, () =>
         {

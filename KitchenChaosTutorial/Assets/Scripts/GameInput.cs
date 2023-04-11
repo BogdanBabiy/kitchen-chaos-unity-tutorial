@@ -19,7 +19,10 @@ public class GameInput : MonoBehaviour
         Move_Left,
         Interact,
         InteractAlternate,
-        Pause
+        Pause,
+        Gamepad_Interact,
+        Gamepad_InteractAlternate,
+        Gamepad_Pause
     }
     
     private PlayerInputActions playerInputActions;
@@ -61,13 +64,14 @@ public class GameInput : MonoBehaviour
     // Invokes the onInteractAction event
     private void Interact_performed(InputAction.CallbackContext obj)
     {
-        if (!KitchenGameManager.Instance.IsGamePlaying()) return;
+        if (KitchenGameManager.Instance.IsGameOver() || KitchenGameManager.Instance.IsCountdownToStartActive()) return;
         // Null check for listeners
        onInteractAction?.Invoke(this,EventArgs.Empty);
     }
 
     public Vector2 GetMovementVectorNormalised()
     {
+        if (KitchenGameManager.Instance.IsGameWaitingToStart()) return Vector2.zero;
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
         return inputVector.normalized;
     }
@@ -91,6 +95,12 @@ public class GameInput : MonoBehaviour
                 return playerInputActions.Player.Move.bindings[3].ToDisplayString();
             case Binding.Move_Left:
                 return playerInputActions.Player.Move.bindings[4].ToDisplayString();
+            case Binding.Gamepad_Interact:
+                return playerInputActions.Player.Interact.bindings[1].ToDisplayString();
+            case Binding.Gamepad_InteractAlternate:
+                return playerInputActions.Player.InteractAlternate.bindings[1].ToDisplayString();
+            case Binding.Gamepad_Pause:
+                return playerInputActions.Player.Pause.bindings[1].ToDisplayString();
         }
     }
 
@@ -107,6 +117,9 @@ public class GameInput : MonoBehaviour
             Binding.Move_Down => (playerInputActions.Player.Move, 2),
             Binding.Move_Right => (playerInputActions.Player.Move, 3),
             Binding.Move_Left => (playerInputActions.Player.Move, 4),
+            Binding.Gamepad_Interact => (playerInputActions.Player.Interact, 1),
+            Binding.Gamepad_InteractAlternate => (playerInputActions.Player.InteractAlternate, 1),
+            Binding.Gamepad_Pause => (playerInputActions.Player.Pause, 1),
             _ => (playerInputActions.Player.Interact,0)
         };
         

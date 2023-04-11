@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class KitchenGameManager : MonoBehaviour
@@ -21,7 +22,6 @@ public class KitchenGameManager : MonoBehaviour
     [SerializeField] private float gamePlayingTimerMax = 10f;
     
     private GameState state;
-    private float waitingToStartTimer = 1f;
     private float countdownToStartTimer = 3f;
     private float gamePlayingTimer;
     private bool isGamePaused;
@@ -39,6 +39,16 @@ public class KitchenGameManager : MonoBehaviour
     void Start()
     {
         GameInput.Instance.onPauseAction += GameInput_onPauseAction;
+        GameInput.Instance.onInteractAction += GameInput_onInteractAction;
+    }
+
+    private void GameInput_onInteractAction(object sender, EventArgs e)
+    {
+        if (state == GameState.WaitingToStart)
+        {
+            state = GameState.CountdownToStart;
+            OnGameStateChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void GameInput_onPauseAction(object sender, EventArgs e)
@@ -62,12 +72,6 @@ public class KitchenGameManager : MonoBehaviour
         switch (state)
         {
             case GameState.WaitingToStart:
-                waitingToStartTimer -= Time.deltaTime;
-                if (waitingToStartTimer < 0f)
-                {
-                    state = GameState.CountdownToStart;
-                    OnGameStateChanged?.Invoke(this,EventArgs.Empty);
-                }
                 break;
             case GameState.CountdownToStart:
                 countdownToStartTimer -= Time.deltaTime;
@@ -91,6 +95,11 @@ public class KitchenGameManager : MonoBehaviour
         }
     }
 
+    public bool IsGameWaitingToStart()
+    {
+        return state == GameState.WaitingToStart;
+    }
+    
     public bool IsGamePlaying()
     {
         return state == GameState.GamePlaying;
